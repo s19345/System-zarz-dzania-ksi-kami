@@ -14,5 +14,8 @@ remove_internal(df)
 
 def capital_letters(data_frame: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     """reformatting authors' names to always start with a capital letter"""
-    if "name" in [column.lower() for column in data_frame.columns]:
+    if set(columns).issubset(set(data_frame.columns)):
+        for column in columns:
+            data_frame[column] = data_frame[column].str.capitalize()
+        return data_frame
 

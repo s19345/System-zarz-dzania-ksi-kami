@@ -1,6 +1,8 @@
 import json
+import os
 import sys
 import logging
+import time
 from pathlib import Path
 
 from watchdog.observers import Observer
@@ -10,22 +12,22 @@ def load_config(file):
     with open(file) as f:
         return json.load(f)
 
-# class FileHandler(FileSystemEventHandler):
-#     def on_created(self, event):
-#         filepath = Path(config["WATCHED_DIR"])
-#         if filepath.suffix in ['.csv', '.xlsx']:
-#             print(f"Znaleziono plik: {filepath.name}")
+def format_file(file: str) -> None:
+    print(file, "sformatuj ten plik")
+
 
 if __name__ == "__main__":
-    pass
-    # config = load_config("config.json")
-    # event_handler = LoggingEventHandler()
-    # observer = Observer()
-    # # observer.schedule(event_handler, path, recursive=True)
-    # observer.start()
-    # try:
-    #     while observer.is_alive():
-    #         observer.join(1)
-    # finally:
-    #     observer.stop()
-    #     observer.join()
+    config = load_config("config.json")
+    watched_dir = Path(config["WATCHED_DIR"])
+    known_files = os.listdir(watched_dir)
+    for file in known_files:
+        format_file(file)
+
+    while True:
+        current_files = os.listdir(watched_dir)
+        new_files = set(current_files) - set(known_files)
+        for file in new_files:
+            format_file(file)
+        known_files.update(new_files)
+        time.sleep(1)
+
