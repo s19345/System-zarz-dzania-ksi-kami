@@ -1,4 +1,5 @@
 {
-  "WATCHED_DIR": "./new_data",
+  "watched_dir": "./new_data",
+  "cache_dir": "./cache",
   "patterns": [".*\\.csv$", ".*\\.xlsx$"]
 }

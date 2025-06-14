@@ -38,7 +38,7 @@ def check_file(file: str) -> bool:
     return False
 
 def load_file(file: str) -> pd.DataFrame:
-    directory = CONFIG["WATCHED_DIR"]
+    directory = CONFIG["watched_dir"]
     if file.endswith(".xlsx"):
         return pd.read_excel(os.path.join(directory, file))
     elif file.endswith(".csv"):
@@ -48,7 +48,7 @@ def load_file(file: str) -> pd.DataFrame:
 
 
 def delete_file(file: str) -> None:
-    directory = CONFIG["WATCHED_DIR"]
+    directory = CONFIG["watched_dir"]
     filepath = os.path.join(directory, file)
     try:
         os.remove(filepath)
@@ -67,6 +67,22 @@ def filter_data_frame_by_publisher_and_author(data_frame: pd.DataFrame) -> pd.Da
 def remove_empty_records(data_frame: pd.DataFrame) -> pd.DataFrame:
     data_frame.dropna(how='any', inplace=True)
     return data_frame
+
+def save_to_cache(data_frame: pd.DataFrame, file) -> None:
+    directory = CONFIG.get("cache_dir")
+    file_name_without_extension = os.path.splitext(file)[0]
+    cached_filename = f"{file_name_without_extension}.pkl"
+    data_frame.to_pickle(os.path.join(directory, cached_filename))
+
+def load_cache(file) -> pd.DataFrame | None:
+    directory = CONFIG.get("cache_dir")
+    os.makedirs(directory, exist_ok=True)
+    file_name_without_extension = os.path.splitext(file)[0]
+    cached_filename = f"{file_name_without_extension}.pkl"
+    try:
+        return pd.read_pickle(os.path.join(directory, cached_filename))
+    except FileNotFoundError:
+        print(f"File {cached_filename} not found in cache.")
 
 
 
