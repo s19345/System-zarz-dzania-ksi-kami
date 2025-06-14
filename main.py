@@ -15,8 +15,9 @@ def format_files(files: list[str]) -> None:
                 print(e)
             df = remove_internal(df)
             df = remove_empty_records(df)
-            df = capital_letters(df)
-            df = filter_data_frame_by_publisher_and_author(df)
+            df = capital_letters(df, ['Name', 'Surname'])
+            # df = filter_data_frame_by_publisher_and_author(df)
+            print(df.head())
         else:
             delete_file(file)
 

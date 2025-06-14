@@ -1,4 +1,4 @@
 {
   "WATCHED_DIR": "./new_data",
-  "patterns": [".\\.csv$", ".\\.xlsx$"]
+  "patterns": [".*\\.csv$", ".*\\.xlsx$"]
 }

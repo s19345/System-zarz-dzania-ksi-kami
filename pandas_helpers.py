@@ -18,9 +18,9 @@ def remove_internal(data_frame: pd.DataFrame) -> pd.DataFrame:
             data_frame.drop(i, axis=1, inplace=True)
     return data_frame
 
-remove_internal(df)
 
 def capital_letters(data_frame: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    # todo st. james nie zadziala
     """reformatting authors' names to always start with a capital letter"""
     if set(columns).issubset(set(data_frame.columns)):
         for column in columns:
@@ -40,9 +40,9 @@ def check_file(file: str) -> bool:
 def load_file(file: str) -> pd.DataFrame:
     directory = CONFIG["WATCHED_DIR"]
     if file.endswith(".xlsx"):
-        pd.read_excel(os.path.join(directory, file))
+        return pd.read_excel(os.path.join(directory, file))
     elif file.endswith(".csv"):
-        pd.read_csv(os.path.join(directory, file))
+        return pd.read_csv(os.path.join(directory, file))
     else:
         raise ValueError("File extension must be .csv or .xlsx")
 
@@ -60,9 +60,9 @@ def delete_file(file: str) -> None:
 
 def filter_data_frame_by_publisher_and_author(data_frame: pd.DataFrame) -> pd.DataFrame:
     # todo moze zmodyfikowac funkcje aby byla reuzywalna
-    publisher_filter = data_frame['Publisher'].isin(('Random House', 'Penguin Random House'))
-    author_filter = (data_frame['Name'] == ['Stephen']) & (data_frame['Surname'] == ['King'])
-    return data_frame(publisher_filter | author_filter)
+    publisher_filter = data_frame['Publisher'].isin(('Random house', 'Penguin random house'))
+    author_filter = (data_frame['Name'] == 'Stephen') & (data_frame['Surname'] == 'King')
+    return data_frame[publisher_filter | author_filter]
 
 def remove_empty_records(data_frame: pd.DataFrame) -> pd.DataFrame:
     data_frame.dropna(how='any', inplace=True)
