@@ -1,13 +1,11 @@
-import json
 import os
 import re
 from typing import Pattern
 
 import pandas as pd
 
-def load_config(file):
-    with open(file) as f:
-        return json.load(f)
+from api_requests import get_openlibrary_data
+from config_loader import load_config
 
 CONFIG = load_config("config.json")
 
@@ -83,6 +81,29 @@ def load_cache(file) -> pd.DataFrame | None:
         return pd.read_pickle(os.path.join(directory, cached_filename))
     except FileNotFoundError:
         print(f"File {cached_filename} not found in cache.")
+
+
+def add_data_to_dataframe(data_frame: pd.DataFrame) -> pd.DataFrame:
+    for idx, row in data_frame.iterrows():
+        title = row["Title"]
+        name = row["Name"]
+        surname = row["Surname"]
+        author_full_name = name + " " + surname
+        api_data = get_openlibrary_data(title, author_full_name)
+        if api_data is not None:
+            for key, value in api_data.items():
+                if not value:
+                    value = pd.NA
+                else:
+                    data_frame.at[idx, key] = value
+    print(data_frame.head())
+    data_frame.to_csv("zmeczona.csv")
+    return data_frame
+
+
+
+
+
 
 
 

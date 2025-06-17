@@ -2,14 +2,16 @@ import os
 import time
 from pathlib import Path
 
-from pandas_helpers import load_config, load_file, check_file, remove_internal, capital_letters, delete_file, \
-    filter_data_frame_by_publisher_and_author, remove_empty_records, save_to_cache, load_cache
+from pandas_helpers import load_file, check_file, remove_internal, capital_letters, delete_file, \
+    filter_data_frame_by_publisher_and_author, remove_empty_records, save_to_cache, load_cache, add_data_to_dataframe
+from config_loader import load_config
 
 
 def format_files(files: list[str]) -> None:
     for file in files:
         if check_file(file):
-            df = load_cache(file)
+            # df = load_cache(file)
+            df = None
             if df is None:
                 try:
                     df = load_file(file)
@@ -20,6 +22,7 @@ def format_files(files: list[str]) -> None:
                 df = capital_letters(df, ['Name', 'Surname'])
                 df = filter_data_frame_by_publisher_and_author(df)
                 save_to_cache(df, file)
+                add_data_to_dataframe(df)
                 print(df.head())
             else:
                 print(df.head())

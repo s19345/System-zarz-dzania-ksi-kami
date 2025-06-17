@@ -1,5 +1,7 @@
 {
   "watched_dir": "./new_data",
   "cache_dir": "./cache",
-  "patterns": [".*\\.csv$", ".*\\.xlsx$"]
+  "patterns": [".*\\.csv$", ".*\\.xlsx$"],
+  "search_url": "https://openlibrary.org/search.json?q={query}",
+  "author_url": "https://openlibrary.org/authors/{author}.json"
 }
