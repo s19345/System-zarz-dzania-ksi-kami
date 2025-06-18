@@ -20,7 +20,7 @@ def get_openlibrary_data(title: str, author_full_name: str) -> dict[str, Any]:
             first_publish_year =  data["first_publish_year"]
             edition_count = data["edition_count"]
             author_key = data["author_key"][0]
-            bio = get_author_bio(author_key)
+            bio = get_author_bio(author_key) if author_key else None
             return {
                 "first_publish_year": first_publish_year,
                 "edition_count": edition_count,
@@ -35,5 +35,5 @@ def get_author_bio(author_key: str) -> str:
         data = response.read()
     json_data = json.loads(data.decode())
     bio = json_data["bio"]
-    print(bio)
+    return bio
 

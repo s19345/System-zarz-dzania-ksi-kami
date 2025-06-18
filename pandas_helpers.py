@@ -68,6 +68,7 @@ def remove_empty_records(data_frame: pd.DataFrame) -> pd.DataFrame:
 
 def save_to_cache(data_frame: pd.DataFrame, file) -> None:
     directory = CONFIG.get("cache_dir")
+    os.makedirs(directory, exist_ok=True)
     file_name_without_extension = os.path.splitext(file)[0]
     cached_filename = f"{file_name_without_extension}.pkl"
     data_frame.to_pickle(os.path.join(directory, cached_filename))

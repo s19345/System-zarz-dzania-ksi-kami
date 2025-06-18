@@ -1,7 +1,11 @@
 {
   "watched_dir": "./new_data",
   "cache_dir": "./cache",
-  "patterns": [".*\\.csv$", ".*\\.xlsx$"],
+  "patterns": [
+    "^books\\.xlsx$",
+    "^book.+input\\.xlsx$",
+    "^penguin_input_\\d{5,10}\\.(xlsx|csv)$"
+  ],
   "search_url": "https://openlibrary.org/search.json?q={query}",
   "author_url": "https://openlibrary.org/authors/{author}.json"
 }
