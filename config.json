@@ -2,8 +2,8 @@
   "watched_dir": "./new_data",
   "cache_dir": "./cache",
   "patterns": [
-    "^books\\.xlsx$",
-    "^book.+input\\.xlsx$",
+    "^books\\.(xlsx|csv)$",
+    "^book.+input\\.(xlsx|csv)$",
     "^penguin_input_\\d{5,10}\\.(xlsx|csv)$"
   ],
   "search_url": "https://openlibrary.org/search.json?q={query}",

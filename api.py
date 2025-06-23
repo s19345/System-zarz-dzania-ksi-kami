@@ -1,12 +1,20 @@
-import pandas as pd
-from flask import Flask, jsonify, Response
+from flask import Flask, jsonify
+from flask.typing import ResponseReturnValue
+from file_watcher import FileWatcher
 
 
-def create_api(data_frame: pd.DataFrame) -> Flask:
+def create_api(file_watcher: FileWatcher) -> Flask:
+    """creates a Flask API using the data provided by the FileWatcher."""
     app = Flask(__name__)
+
+    @app.before_request
+    def update_data_frame():
+        """runs FileWatcher class scan method before each request."""
+        file_watcher.scan()
 
     @app.route("/")
     def index():
+        """returns a welcome message and a list of available API endpoints."""
         return jsonify(
             {
                 "1. message": "Welcome to the Book API!",
@@ -18,8 +26,10 @@ def create_api(data_frame: pd.DataFrame) -> Flask:
             })
 
     @app.route("/books/<author>")
-    def search_books_by_author(author: str) -> Response:
-        if data_frame is None:
+    def search_books_by_author(author: str) -> ResponseReturnValue:
+        """returns all books written by a given author."""
+        data_frame = file_watcher.df
+        if data_frame.empty:
             return jsonify({"error": "No data found"}), 500
         author = author.lower()
         df_author_name = (data_frame["Name"].str.strip() + data_frame["Surname"].str.strip()).str.lower()
@@ -28,20 +38,23 @@ def create_api(data_frame: pd.DataFrame) -> Flask:
         if matches.empty:
             return jsonify({"error": "No books found"}), 404
         else:
-            return jsonify(matches.to_dict(orient="records"))  # todo do sprawdzenia czy default value bedzie ok
+            return jsonify(matches.to_dict(orient="records"))
 
     @app.route("/books")
-    def get_all_books():
-        if data_frame is None:
+    def get_all_books() -> ResponseReturnValue:
+        """returns all books in data frame"""
+        data_frame = file_watcher.df
+        if data_frame.empty:
             return jsonify({"error": "Data not loaded"}), 500
-        print(data_frame.columns)
-        result = data_frame[["Title", "Name", "Surname", "first_publish_year", "edition_count"]]
-
+        # result = data_frame[["Title", "Name", "Surname", "first_publish_year", "edition_count"]]
+        result = data_frame
         return jsonify(result.to_dict(orient="records"))
 
     @app.route("/books/search/<keyword>")
-    def search_books_by_title(keyword: str) -> Response:
-        if data_frame is None:
+    def search_books_by_title(keyword: str) -> ResponseReturnValue:
+        """searching books by provided title"""
+        data_frame = file_watcher.df
+        if data_frame.empty:
             return jsonify({"error": "Data not loaded"}), 500
         keyword = keyword.lower()
         matches = data_frame[data_frame["Title"].str.lower().str.contains(keyword)]
