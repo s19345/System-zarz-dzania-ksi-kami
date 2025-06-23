@@ -97,7 +97,6 @@ def save_to_cache(data_frame: pd.DataFrame, file) -> None:
 def load_cache(file) -> pd.DataFrame | None:
     """loads a cached DataFrame from a pickle file if it exists."""
     directory = CONFIG.get("cache_dir")
-    os.makedirs(directory, exist_ok=True)
     file_name_without_extension = os.path.splitext(file)[0]
     cached_filename = f"{file_name_without_extension}.pkl"
     try:
