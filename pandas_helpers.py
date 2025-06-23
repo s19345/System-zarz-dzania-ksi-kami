@@ -30,6 +30,7 @@ def capital_letters(data_frame: pd.DataFrame, columns: list[str]) -> pd.DataFram
             logger.info(f"Capitalizing column {column} in DataFrame")
     return data_frame
 
+
 def check_file(file: str) -> bool:
     """checking if file matches regex patterns in config.json"""
     allowed_patterns: list[str] = CONFIG["patterns"]
@@ -39,6 +40,7 @@ def check_file(file: str) -> bool:
         if p.match(file):
             return True
     return False
+
 
 def load_file(file: str) -> pd.DataFrame | ValueError:
     """loads a .csv or .xlsx file from the watched directory into a DataFrame."""
@@ -74,11 +76,13 @@ def filter_data_frame_by_publisher_and_author(data_frame: pd.DataFrame) -> pd.Da
     logger.info("Filtering DataFrame by publisher and author")
     return data_frame[publisher_filter | author_filter]
 
+
 def remove_empty_records(data_frame: pd.DataFrame) -> pd.DataFrame:
     """removes rows from the DataFrame that contain any missing values."""
     data_frame.dropna(how='any', inplace=True)
     logger.info("Removing empty records from DataFrame")
     return data_frame
+
 
 def save_to_cache(data_frame: pd.DataFrame, file) -> None:
     """saves the given DataFrame to a pickle file in the cache directory."""
@@ -88,6 +92,7 @@ def save_to_cache(data_frame: pd.DataFrame, file) -> None:
     cached_filename = f"{file_name_without_extension}.pkl"
     data_frame.to_pickle(os.path.join(directory, cached_filename))
     logger.info(f"DataFrame saved to cache as {cached_filename}")
+
 
 def load_cache(file) -> pd.DataFrame | None:
     """loads a cached DataFrame from a pickle file if it exists."""
@@ -118,13 +123,3 @@ def add_data_to_dataframe(data_frame: pd.DataFrame) -> pd.DataFrame:
                 data_frame.at[idx, key] = value
     logger.info("Adding additional data to DataFrame from external API")
     return data_frame
-
-
-
-
-
-
-
-
-
-

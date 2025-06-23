@@ -4,6 +4,7 @@ from logger import set_up_logger
 
 logger = set_up_logger(__name__)
 
+
 def load_config(file):
     """retrieves data from configuration file"""
     with open(file) as f:

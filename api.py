@@ -34,7 +34,6 @@ def create_api(file_watcher: FileWatcher) -> Flask:
         author = author.lower()
         df_author_name = (data_frame["Name"].str.strip() + data_frame["Surname"].str.strip()).str.lower()
         matches = data_frame[df_author_name == author]
-        matches = matches[["Title", "Name", "Surname", "first_publish_year", "edition_count"]]
         if matches.empty:
             return jsonify({"error": "No books found"}), 404
         else:
@@ -47,8 +46,7 @@ def create_api(file_watcher: FileWatcher) -> Flask:
         if data_frame.empty:
             return jsonify({"error": "Data not loaded"}), 500
         # result = data_frame[["Title", "Name", "Surname", "first_publish_year", "edition_count"]]
-        result = data_frame
-        return jsonify(result.to_dict(orient="records"))
+        return jsonify(data_frame.to_dict(orient="records"))
 
     @app.route("/books/search/<keyword>")
     def search_books_by_title(keyword: str) -> ResponseReturnValue:
@@ -58,7 +56,6 @@ def create_api(file_watcher: FileWatcher) -> Flask:
             return jsonify({"error": "Data not loaded"}), 500
         keyword = keyword.lower()
         matches = data_frame[data_frame["Title"].str.lower().str.contains(keyword)]
-        result = matches[["Title", "Name", "Surname", "first_publish_year", "edition_count"]]
-        return jsonify(result.to_dict(orient="records"))
+        return jsonify(matches.to_dict(orient="records"))
 
     return app

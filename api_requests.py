@@ -26,7 +26,8 @@ def get_openlibrary_data(title: str, author_full_name: str) -> dict[str, Any] | 
         data = response.read()
     json_data = json.loads(data.decode())
     for data in json_data["docs"]:
-        if normalize_string(data.get("title")) == normalize_string(title) and normalize_string(data.get("author_name", [None])[0]) == normalize_string(author_full_name):
+        if normalize_string(data.get("title")) == normalize_string(title) and normalize_string(
+                data.get("author_name", [None])[0]) == normalize_string(author_full_name):
             first_publish_year = data.get("first_publish_year")
             edition_count = data.get("edition_count")
             author_key = data.get("author_key", [None])[0]
