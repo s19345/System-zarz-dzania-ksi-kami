@@ -71,8 +71,8 @@ def delete_file(file: str) -> None:
 
 def filter_data_frame_by_publisher_and_author(data_frame: pd.DataFrame) -> pd.DataFrame:
     """filters the DataFrame to include only records from specific publishers or books authored by Stephen King."""
-    publisher_filter = data_frame['Publisher'].isin(('Random house', 'Penguin random house'))
-    author_filter = (data_frame['Name'] == 'Stephen') & (data_frame['Surname'] == 'King')
+    publisher_filter = data_frame.get('Publisher').isin(('Random house', 'Penguin random house'))
+    author_filter = (data_frame.get('Name') == 'Stephen') & (data_frame.get('Surname') == 'King')
     logger.info("Filtering DataFrame by publisher and author")
     return data_frame[publisher_filter | author_filter]
 

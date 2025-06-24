@@ -45,7 +45,6 @@ def create_api(file_watcher: FileWatcher) -> Flask:
         data_frame = file_watcher.df
         if data_frame.empty:
             return jsonify({"error": "Data not loaded"}), 500
-        # result = data_frame[["Title", "Name", "Surname", "first_publish_year", "edition_count"]]
         return jsonify(data_frame.to_dict(orient="records"))
 
     @app.route("/books/search/<keyword>")
